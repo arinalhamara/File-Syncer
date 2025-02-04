@@ -13,7 +13,6 @@ class FileSyncer:
         self.queue = Queue()
 
     def hash_file(self, file_path):
-        """Menghasilkan hash SHA-256 untuk file"""
         hasher = hashlib.sha256()
         with open(file_path, 'rb') as f:
             while chunk := f.read(4096):
@@ -21,7 +20,6 @@ class FileSyncer:
         return hasher.hexdigest()
 
     def sync_file(self, src_file, dest_file):
-        """Sinkronisasi file jika berbeda"""
         if os.path.exists(dest_file):
             if self.hash_file(src_file) == self.hash_file(dest_file):
                 return  # File tidak berubah
@@ -38,7 +36,6 @@ class FileSyncer:
             self.queue.task_done()
 
     def sync(self):
-        """Menjalankan sinkronisasi file"""
         threads = []
         for _ in range(self.threads):
             t = threading.Thread(target=self.worker)
